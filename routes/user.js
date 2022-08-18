@@ -78,7 +78,7 @@ router.post('/change-product-quantity', (req, res) => {
     res.json(response)
   })
 })
-router.get('/remove-product', (req, res) => {
+router.post('/remove-product', (req, res) => {  
   userHelper.removeProduct(req.body).then((response) => {
     res.json(response)
   })

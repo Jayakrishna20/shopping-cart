@@ -149,12 +149,12 @@ module.exports = {
         })
     },
     removeProduct: (details) => {
-        details.quantity = parseInt(details.quantity)
+        console.log(details);        
         return new Promise((resolve, reject) => {
             db.get().collection(collection.CART_COLLECTION)
                 .updateOne({ _id: objectId(details.cart) },
                     {
-                        $pull: { products: { item: objectId(details.product), quantity: details.quantity } }
+                        $pull: { products: { item: objectId(details.product) } }
                     }
                 ).then((response) => {
                     resolve(true)
