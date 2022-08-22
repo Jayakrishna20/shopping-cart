@@ -5,13 +5,25 @@ var router = express.Router();
 var productHelper = require('../helpers/product-helpers')
 
 /* GET users listing. */
+
 router.get('/', function (req, res, next) {
   productHelper.getAllProducts().then((products) => {
     res.render('admin/view-products', { admin: true, products })
   })
 });
+router.get('/all-products', (req, res) => {
+  productHelper.getAllProducts().then((products) => {
+    res.render('admin/all-products', { admin: true, products })
+  })
+});
+router.get('/all-orders', (req, res) => {
+  res.render('admin/all-orders', { admin: true })
+})
+router.get('/all-users', (req, res) => {
+  res.render('admin/all-users', { admin: true })
+})
 router.get('/add-product', function (req, res) {
-  res.render('admin/add-product')
+  res.render('admin/add-product', { admin: true })
 });
 router.post('/add-product', (req, res) => {
   try {
@@ -26,7 +38,7 @@ router.post('/add-product', (req, res) => {
   productHelper.addProduct(req.body, (id) => {
     file.mv('./public/product-images/' + id + '.jpg', (err, done) => {
       if (!err) {
-        res.render("admin/add-product")
+        res.render("admin/add-product", { admin: true })
       } else {
         console.log(err);
       }
@@ -41,7 +53,7 @@ router.get('/delete-product/:id', (req, res) => {
 })
 router.get('/edit-product/:id', async (req, res) => {
   let product = await productHelper.getProductDetails(req.params.id)
-  res.render('admin/edit-product', { product })
+  res.render('admin/edit-product', { admin: true, product })
 })
 router.post('/edit-product/:id', (req, res) => {
   let id = req.params.id;
