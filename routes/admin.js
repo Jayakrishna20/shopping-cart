@@ -5,12 +5,41 @@ var router = express.Router();
 var productHelper = require('../helpers/product-helpers')
 
 /* GET users listing. */
-
-router.get('/', function (req, res, next) {
-  productHelper.getAllProducts().then((products) => {
-    res.render('admin/view-products', { admin: true, products })
+router.get('/admin-login', (req, res) => {
+  res.render('admin/admin-login', { admin: true })
+})
+router.post('/login', (req, res) => {
+  productHelper.doLogin(req.body).then((response) => {
+    console.log(response);
+    if (response.status) {
+      req.session.loggedIn = true
+      req.session.admin = response.admin
+      res.redirect('/admin')
+    }
+    else {
+      res.redirect('./admin-login')
+    }
   })
+})
+router.get('/', function (req, res, next) {
+  let admin = req.session.admin
+  console.log(admin);
+  if (admin) {
+    productHelper.getAllProducts().then((products) => {
+      res.render('admin/view-products', { admin: true, products, admin, status: true })
+    })
+  }
+  else {
+    productHelper.getAllProducts().then((products) => {
+      res.render('admin/view-products', { admin: true, products, status: false })
+    })
+  }
+
 });
+router.get('/admin-logout', (req, res) => {
+  req.session.destroy()
+  res.redirect('/admin')
+})
 router.get('/all-products', (req, res) => {
   productHelper.getAllProducts().then((products) => {
     res.render('admin/all-products', { admin: true, products })
