@@ -1,13 +1,12 @@
 <section>
     <div class="container mt-5">        
-        <table class="table mt-5" id="products-table">
+        <table class="table mt-5" id="orders-table">
             <thead>
-                <tr>
-                    <th scope="col">Title</th>
-                    <th scope="col">Category</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Description</th>
-                    <th>Image</th>                    
+                <tr>                    
+                    <th scope="col">Ordered User</th>
+                    <th scope="col">Mobile Number</th> 
+                    <th scope="col">Cart Total</th>                              
+                    <th scope="col">Payment-Method</th>                    
                 </tr>
             </thead>
             <tbody>
@@ -15,9 +14,8 @@
                 <tr>
                     <td>sfda</td>
                     <td>sadg</td>
-                    <td>fsad</td>
-                    <td>sdag</td>                    
-                    <td><img src="/product-images/{{this._id}}.jpg" style="width: 50px; height: 50px;" alt="asfk"></td>                    
+                    <td>fsad</td>             
+                    <td>sda</td>                        
                 </tr>
                 
             </tbody>
@@ -26,6 +24,6 @@
 </section>
 <script>
     $(document).ready(function () {
-        $('#products-table').DataTable();
+        $('#orders-table').DataTable();
     });
 </script>

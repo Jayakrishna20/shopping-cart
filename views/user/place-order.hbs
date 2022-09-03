@@ -26,7 +26,7 @@
                             <input type="radio" name="payment-method" value="COD" checked>COD
                             </label>
                             <label class="radio-inline mt-2">
-                                <input type="radio" name="payment-method" id="ONLINE">Online Payment
+                                <input type="radio" name="payment-method" value="ONLINE">Online Payment
                             </label>
                             <button type="submit" class="btn btn-primary float-right">Checkout</button>
                         </div>
@@ -46,6 +46,7 @@
             data: $('#checkout-form').serialize(),
             success: (response) => {
                 if (response.codSuccess) {
+                    console.log(response.codSuccess)                    
                     location.href = '/order-success'
                 } else {
                     razorpayPayment(response)

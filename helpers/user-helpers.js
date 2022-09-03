@@ -18,22 +18,25 @@ module.exports = {
         })
     },
     doLogin: (userData) => {
-        return new Promise(async (resolve, reject) => {            
-            let response = {}
-            let user = await db.get().collection(collection.USER_COLLECTION).findOne({ Email: userData.Email })
-            if (user) {
-                brcypt.compare(userData.Password, user.Password).then((status) => {
-                    if (status) {
-                        response.user = user
-                        response.status = true
-                        resolve(response)
-                    } else {
-                        resolve({ status: false })
-                    }
-                })
-            } else {
-                console.log("login failed");
+        adminEmail = "admin001@gmail.com"
+        return new Promise(async (resolve, reject) => {
+            if (userData.Email != adminEmail) {
+                let response = {}
+                let user = await db.get().collection(collection.USER_COLLECTION).findOne({ Email: userData.Email })
+                if (user) {
+                    brcypt.compare(userData.Password, user.Password).then((status) => {
+                        if (status) {
+                            response.user = user
+                            response.status = true
+                            resolve(response)
+                        } else {
+                            resolve({ status: false })
+                        }
+                    })
+                } else {
+                    console.log("login failed");
 
+                }
             }
         })
     },
@@ -148,7 +151,7 @@ module.exports = {
         })
     },
     removeProduct: (details) => {
-        console.log(details);        
+        console.log(details);
         return new Promise((resolve, reject) => {
             db.get().collection(collection.CART_COLLECTION)
                 .updateOne({ _id: objectId(details.cart) },
@@ -276,7 +279,7 @@ module.exports = {
     generateRazorpay: (orderId, total) => {
         return new Promise((resolve, reject) => {
             var options = {
-                amount: total * 100,
+                amount: total *100,
                 currency: "INR",
                 receipt: "" + orderId,
             };
@@ -315,6 +318,20 @@ module.exports = {
                         }
                     }
                 ).then(() => {
+                    resolve()
+                })
+        })
+    },
+    changeUserOrderStatus: (userId) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.USER_COLLECTION)
+                .updateOne({ _id: objectId(userId) },
+                    {
+                        $set: {
+                            orderStatus: true
+                        }
+                    }
+                ).then(()=>{
                     resolve()
                 })
         })

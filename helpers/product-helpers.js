@@ -4,7 +4,6 @@ var objectId = require('mongodb').ObjectID
 var brcypt = require('bcrypt')
 module.exports = {
     doLogin: (adminData) => {
-
         adminEmail = "admin001@gmail.com"
         return new Promise(async (resolve, reject) => {
             if (adminData.Email == adminEmail) {
@@ -70,5 +69,46 @@ module.exports = {
                     resolve()
                 })
         })
-    }
+    },
+    getAllUsers: () => {
+        return new Promise((resolve, reject) => {
+            let users = db.get().collection(collection.USER_COLLECTION).find().toArray()
+            resolve(users)
+        })
+    },
+    // getAllOrders: () => {
+    //     return new Promise(async (resolve, reject) => {
+    //         let orders = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
+    //             {
+    //                 $match: { user: objectId(userId) }
+    //             },
+    //             {
+    //                 $unwind: '$products'
+    //             },
+    //             {
+    //                 $project: {
+    //                     item: '$products.item',
+    //                     quantity: '$products.quantity',
+    //                 }
+    //             },
+    //             {
+    //                 $lookup: {
+    //                     from: collection.PRODUCT_COLLECTION,
+    //                     localField: 'item',
+    //                     foreignField: '_id',
+    //                     as: 'product'
+    //                 }
+    //             },
+    //             {
+    //                 $project: {
+    //                     item: 1, quantity: 1,
+    //                     product: {
+    //                         $arrayElemAt: ['$product', 0]
+    //                     }
+    //                 }
+    //             }
+    //         ]).toArray()
+    //         console.log(orders)
+    //     })
+    // }
 }

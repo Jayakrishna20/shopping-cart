@@ -3,23 +3,21 @@
         <table class="table mt-5" id="products-table">
             <thead>
                 <tr>
-                    <th scope="col">Title</th>
-                    <th scope="col">Category</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Description</th>
-                    <th>Image</th>                    
+                    <th scope="col">Name</th>
+                    <th scope="col">Created Date</th>
+                    <th scope="col">Email</th>             
+                    <th scope="col">Order Status</th>                                          
                 </tr>
             </thead>
             <tbody>
-               
+               {{#each user}}
                 <tr>
-                    <td>sfda</td>
-                    <td>sadg</td>
-                    <td>fsad</td>
-                    <td>sdag</td>                    
-                    <td><img src="/product-images/{{this._id}}.jpg" style="width: 50px; height: 50px;" alt="asfk"></td>                    
+                    <td>{{this.Name}}</td>
+                    <td>{{this.createdDate}}</td>
+                    <td>{{this.Email}}</td>
+                    <td>{{this.orderStatus}}</td>                                                   
                 </tr>
-                
+                {{/each}}
             </tbody>
         </table>
     </div>

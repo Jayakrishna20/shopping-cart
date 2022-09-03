@@ -78,7 +78,7 @@ router.post('/change-product-quantity', (req, res) => {
     res.json(response)
   })
 })
-router.post('/remove-product', (req, res) => {  
+router.post('/remove-product', (req, res) => {
   userHelper.removeProduct(req.body).then((response) => {
     res.json(response)
   })
@@ -91,6 +91,7 @@ router.post('/place-order', async (req, res) => {
   let products = await userHelper.getCartProductList(req.body.userId)
   let total = await userHelper.getTotalAmount(req.body.userId)
   userHelper.placeOrder(req.body, products, total).then((orderId) => {
+    console.log(req.body);
     if (req.body['payment-method'] === 'COD') {
       res.json({ codSucess: true })
     } else {
@@ -101,7 +102,10 @@ router.post('/place-order', async (req, res) => {
   })
 })
 router.get('/order-success', (req, res) => {
-  res.render('user/order-success', { user: req.session.user })
+  userHelper.changeUserOrderStatus(req.session.user._id).then(() => {
+    res.render('user/order-success', { user: req.session.user })
+  })
+
 })
 router.get('/order', async (req, res) => {
   let orders = await userHelper.getUserOrders(req.session.user._id)

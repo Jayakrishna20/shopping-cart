@@ -6,24 +6,31 @@ var productHelper = require('../helpers/product-helpers')
 
 /* GET users listing. */
 router.get('/admin-login', (req, res) => {
-  res.render('admin/admin-login', { admin: true })
+  if (req.session.admin) {
+    res.redirect('/admin')
+  }
+  else {
+    res.render('admin/admin-login', { admin: true, "loginErr": req.session.adminLoginErr })
+    req.session.userLoginErr = false
+  }
+
 })
 router.post('/login', (req, res) => {
   productHelper.doLogin(req.body).then((response) => {
     console.log(response);
     if (response.status) {
-      req.session.loggedIn = true
+      req.session.adminLoggedIn = true
       req.session.admin = response.admin
       res.redirect('/admin')
     }
     else {
+      req.session.adminLoginErr = true
       res.redirect('./admin-login')
     }
   })
 })
 router.get('/', function (req, res, next) {
-  let admin = req.session.admin
-  console.log(admin);
+  let admin = req.session.admin  
   if (admin) {
     productHelper.getAllProducts().then((products) => {
       res.render('admin/view-products', { admin: true, products, admin, status: true })
@@ -37,7 +44,8 @@ router.get('/', function (req, res, next) {
 
 });
 router.get('/admin-logout', (req, res) => {
-  req.session.destroy()
+  req.session.admin = null
+  req.session.adminLoggedIn = false
   res.redirect('/admin')
 })
 router.get('/all-products', (req, res) => {
@@ -45,11 +53,15 @@ router.get('/all-products', (req, res) => {
     res.render('admin/all-products', { admin: true, products })
   })
 });
-router.get('/all-orders', (req, res) => {
+router.get('/all-orders', (req, res) => {    
   res.render('admin/all-orders', { admin: true })
 })
-router.get('/all-users', (req, res) => {
-  res.render('admin/all-users', { admin: true })
+router.get('/all-users', (req, res) => {  
+  productHelper.getAllUsers().then((user)=>{
+    console.log(user[0]);
+    res.render('admin/all-users', { admin: true , user})
+  })
+  
 })
 router.get('/add-product', function (req, res) {
   res.render('admin/add-product', { admin: true })
